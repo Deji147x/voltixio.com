@@ -1,13 +1,20 @@
 FROM nginx:alpine
 
-# Copy static site into NGINX default public directory
-COPY ./src /usr/share/nginx/html
+# Install Certbot
+RUN apk add --no-cache certbot certbot-nginx
 
-# Copy custom NGINX configuration
+# Copy Site
+COPY ./src /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose HTTP port
-EXPOSE 80
+# Copy Entrypoint
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
-# Run NGINX in foreground
-CMD ["nginx", "-g", "daemon off;"]
+# Expose HTTP and HTTPS
+EXPOSE 80 443
+
+# Persist Certificates (so you don't hit limits on rebuild)
+VOLUME /etc/letsencrypt
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
