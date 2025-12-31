@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
-# Install Certbot, OpenSSL, and dos2unix (to fix line endings)
-RUN apk add --no-cache certbot certbot-nginx openssl dos2unix
+# Install Certbot and OpenSSL
+RUN apk add --no-cache certbot certbot-nginx openssl
 
 # Copy Site
 COPY ./src /usr/share/nginx/html
@@ -9,9 +9,13 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy Entrypoint
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-# Fix line endings (CRLF -> LF)
-RUN dos2unix /docker-entrypoint.sh
+
+# Fix line endings (CRLF -> LF) using sed (more robust)
+RUN sed -i 's/\r$//' /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
+
+# Debug: Check shebang
+RUN head -n 1 /docker-entrypoint.sh
 
 # Expose HTTP and HTTPS
 EXPOSE 80 443
