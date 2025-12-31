@@ -67,4 +67,4 @@ EXPOSE 80 443
 # Persist Certificates (so you don't hit limits on rebuild)
 VOLUME /etc/letsencrypt
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["sh", "/docker-entrypoint.sh"]
