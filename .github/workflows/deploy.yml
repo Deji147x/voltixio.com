@@ -79,10 +79,4 @@ jobs:
             docker rm voltixio || true
             
             # Run new container
-            docker run -d \
-              -p 80:80 \
-              -p 443:443 \
-              -v voltixio-certs:/etc/letsencrypt \
-              --restart always \
-              --name voltixio \
-              ghcr.io/${{ github.repository }}:main
+            docker run -d -p 80:80 --restart always --name voltixio ghcr.io/${{ github.repository }}:main
