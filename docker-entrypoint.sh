@@ -1,18 +1,39 @@
 #!/bin/sh
 
-# If certificates don't exist, request them
+# Function to generate self-signed certs
+generate_self_signed() {
+    echo "Generating self-signed certificate for fallback..."
+    mkdir -p /etc/letsencrypt/live/voltixio.com
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+        -keyout /etc/letsencrypt/live/voltixio.com/privkey.pem \
+        -out /etc/letsencrypt/live/voltixio.com/fullchain.pem \
+        -subj "/C=US/ST=State/L=City/O=VoltixIO/CN=voltixio.com"
+}
+
+# Check if certificates exist
 if [ ! -f /etc/letsencrypt/live/voltixio.com/fullchain.pem ]; then
-    echo "Requesting new SSL certificate..."
+    echo "No certificates found. Attempting to request from Let's Encrypt..."
+    
     # Start Nginx in background for validation
     nginx
     
-    # Request Cert (Mode: webroot)
-    certbot certonly --webroot --webroot-path=/usr/share/nginx/html \
+    # Request Certs
+    if certbot certonly --webroot --webroot-path=/usr/share/nginx/html \
       --email voltixioai@gmail.com --agree-tos --no-eff-email \
-      -d voltixio.com -d www.voltixio.com
+      -d voltixio.com -d www.voltixio.com; then
+        echo "Certificates successfully obtained."
+    else
+        echo "Certbot failed (DNS problem or running on localhost)."
+        generate_self_signed
+    fi
       
-    # Stop Nginx so we can restart it with full config
+    # Stop temp Nginx
     nginx -s stop
+fi
+
+# Ensure files exist before starting main NGINX (double check)
+if [ ! -f /etc/letsencrypt/live/voltixio.com/fullchain.pem ]; then
+    generate_self_signed
 fi
 
 # Auto-renew in background

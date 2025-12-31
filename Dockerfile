@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
-# Install Certbot
-RUN apk add --no-cache certbot certbot-nginx
+# Install Certbot and OpenSSL
+RUN apk add --no-cache certbot certbot-nginx openssl
 
 # Copy Site
 COPY ./src /usr/share/nginx/html
