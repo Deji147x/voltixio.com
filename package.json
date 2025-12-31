@@ -1,0 +1,14 @@
+{
+    "name": "voltixio",
+    "version": "1.0.0",
+    "description": "VoltixIO - Intelligent Automation. Real Results.",
+    "scripts": {
+        "start": "npx serve src",
+        "build": "echo \"Static site – no build step required\"",
+        "docker:build": "docker build -t voltixio .",
+        "docker:run": "docker run -d -p 8080:80 --name voltixio voltixio"
+    },
+    "dependencies": {
+        "serve": "^14.2.0"
+    }
+}
