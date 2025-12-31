@@ -1,7 +1,7 @@
 // Basic n8n integration for contact form
 // Replace N8N_WEBHOOK_URL with your actual webhook URL (hardcoded or injected at build time)
 
-const N8N_WEBHOOK_URL = 'https://your-n8n-instance/webhook/voltixio-contact'; // update this
+const N8N_WEBHOOK_URL = 'http://localhost:5678/webhook-test/ad53bbc1-123e-48da-ad7d-f7b461b37541'; // update this
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contactForm');
