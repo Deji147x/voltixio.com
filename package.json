@@ -9,6 +9,6 @@
         "docker:run": "docker run -d -p 8080:80 --name voltixio voltixio"
     },
     "dependencies": {
-        "serve": "^14.2.0"
+        "serve": "^14.2.6"
     }
 }
