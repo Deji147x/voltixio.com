@@ -6,6 +6,21 @@ This repo is structured for:
 - Static hosting via Docker + NGINX
 - Simple local development with Node
 
+## Production deployment (Hostinger)
+
+The live site at https://voltixio.com is served from Hostinger shared hosting, not Docker.
+`src/index.html` is the exact homepage file running in production. To deploy:
+
+1. In hPanel File Manager, open `public_html` and rename the current `index.html` to a dated backup.
+2. Upload the new `src/index.html` as `index.html`.
+3. Purge LiteSpeed Cache, then check https://voltixio.com in an incognito window.
+
+Apache serves `index.html` for `/` ahead of WordPress via `DirectoryIndex index.html index.php`.
+Every other URL is still handled by WordPress. The Docker files below are for local use only.
+
+Click tracking: any link or button with `data-ghl-event` and `data-ghl-label` fires GA4, GTM,
+Facebook Pixel and a GHL webhook through one delegated listener in `index.html`.
+
 ## Project structure
 
 - `Dockerfile` – NGINX-based static hosting
